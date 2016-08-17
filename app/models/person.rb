@@ -3,6 +3,9 @@ class Person < ActiveRecord::Base
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
+  
+  enum role: {admin: "admin", member: "member"}
+  
   belongs_to :employment_status
   belongs_to :department
   belongs_to :enrollment
