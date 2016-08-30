@@ -13,7 +13,36 @@
 
 ActiveRecord::Schema.define(version: 20160817015729) do
 
+  create_table "corporations", force: :cascade do |t|
+    t.string   "name",       limit: 255
+    t.string   "code",       limit: 255
+    t.date     "start_date"
+    t.date     "end_date"
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+  end
+
+  create_table "departments", force: :cascade do |t|
+    t.string   "name",           limit: 255
+    t.string   "code",           limit: 255
+    t.integer  "parent_id",      limit: 4
+    t.integer  "corporation_id", limit: 4
+    t.date     "start_date"
+    t.date     "end_date"
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+  end
+
+  add_index "departments", ["corporation_id"], name: "index_departments_on_corporation_id", using: :btree
+
   create_table "employment_statuses", force: :cascade do |t|
+    t.string   "name",       limit: 255
+    t.string   "code",       limit: 255
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+  end
+
+  create_table "enrollments", force: :cascade do |t|
     t.string   "name",       limit: 255
     t.string   "code",       limit: 255
     t.datetime "created_at",             null: false
@@ -24,11 +53,27 @@ ActiveRecord::Schema.define(version: 20160817015729) do
     t.string   "name",                 limit: 255
     t.string   "email",                limit: 255
     t.integer  "employment_status_id", limit: 4
+    t.integer  "department_id",        limit: 4
+    t.integer  "title_id",             limit: 4
+    t.integer  "enrollment_id",        limit: 4
     t.datetime "created_at",                       null: false
     t.datetime "updated_at",                       null: false
   end
 
+  add_index "people", ["department_id"], name: "index_people_on_department_id", using: :btree
   add_index "people", ["employment_status_id"], name: "index_people_on_employment_status_id", using: :btree
+  add_index "people", ["enrollment_id"], name: "index_people_on_enrollment_id", using: :btree
+  add_index "people", ["title_id"], name: "index_people_on_title_id", using: :btree
 
+  create_table "titles", force: :cascade do |t|
+    t.string   "name",       limit: 255
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+  end
+
+  add_foreign_key "departments", "corporations"
+  add_foreign_key "people", "departments"
   add_foreign_key "people", "employment_statuses"
+  add_foreign_key "people", "enrollments"
+  add_foreign_key "people", "titles"
 end

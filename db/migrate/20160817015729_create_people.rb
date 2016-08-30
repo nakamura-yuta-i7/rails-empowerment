@@ -4,7 +4,9 @@ class CreatePeople < ActiveRecord::Migration
       t.string :name
       t.string :email
       t.references :employment_status, index: true, foreign_key: true
-
+      t.references :department, index: true, foreign_key: true
+      t.references :title, index: true, foreign_key: true
+      t.references :enrollment, index: true, foreign_key: true
       t.timestamps null: false
     end
   end
